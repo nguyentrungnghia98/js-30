@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Speed Scrubber</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="wrapper">
+    <video class="flex" width="765" height="430" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" loop controls></video>
+    <div class="speed">
+      <div class="speed-bar">1×</div>
+    </div>
+  </div>
+
+<script>
+  const video = document.querySelector("video");
+  const speed = document.querySelector(".speed");
+  const speedBar = speed.querySelector(".speed-bar");
+  const originHeight = speedBar.offsetHeight;
+  function handleMouseMove(e){
+    console.log();
+    const percent = e.offsetY / speed.offsetHeight;
+    speedBar.style.height = percent * 100 + "%";
+
+    const speedNumber = (speedBar.offsetHeight/originHeight).toFixed(2);
+    speedBar.innerHTML = "x" + speedNumber;
+
+    video.playbackRate = speedNumber.toString();
+
+  }
+
+  speed.addEventListener("mousemove", handleMouseMove)
+</script>
+</body>
+</html>

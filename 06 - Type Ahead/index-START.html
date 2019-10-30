@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      const cities = []
+      const endpoint =
+        "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+      fetch(endpoint).then(data => data.json())
+                      .then(data => cities.push(...data))
+      
+      function handleChange(e){
+        const regex = new RegExp(this.value, 'gi')
+        const filterCities = cities.filter(({city, state}) => city.match(regex) || state.match(regex))
+
+        const suggestions = document.querySelector(".suggestions");
+        suggestions.innerHTML = filterCities.map(({city, state, population}) => {
+          let tmp =  `
+          <li>
+            <span class="name">${city}, ${state}</span>
+            <span class="population">${population}</span>
+          </li>
+          `
+          return tmp.replace(regex, `<span class="hl">${this.value}</span>`)
+        }).join('');
+      }
+
+      const input = document.querySelector('.search');
+      input.addEventListener("keyup", handleChange)
+
+      
+    </script>
+  </body>
+</html>
